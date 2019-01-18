@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 from scipy.integrate import quad
 from scipy.misc import derivative
 from numpy.linalg import linalg
-
+from functools import reduce
 
 def E(i, n):
     h = 1/n
@@ -61,9 +61,26 @@ def solveGalerkin(fa, fb, fc, ff, beta, gamma, n1, n):
     lp = np.linspace(0, 1, 100)
 
     res = linalg.solve(MB, ML)
+
     print(res)
 
+    FinalFunc = lambda x: 0
+    for i in range(0, n):
+        FinalFunc = constructFinalFunc(FinalFunc, (lambda x: res[i] * E(i, n)(x)))
+
     
+
+    # FinalFunc = constructFinalFunc(FinalFunc, (lambda x: E(n, n)(x) * n1))
+    
+    plt.plot(lp, np.fromiter(map((lambda x: E(0, n)(x) + E(1, n)(x)), lp), dtype=np.float_))
+    # plt.plot(lp, np.fromiter(map(E(5, 5), lp), dtype=np.float_))
+
+    plt.show()
+
+
+
+def constructFinalFunc(f, g):
+    return lambda x: f(x) + g(x)
 
 
 a = lambda x: 1
