@@ -13,6 +13,21 @@ def E(i, n):
 def dE(i, n):
     return lambda x: derivative(E(i, n), x, dx = 1e-6)
 
+#####################Test funkcji e#######################
+
+print("testing base functions")
+A=0
+B=1
+LEN = B-A
+def showEs(n):
+    lin = np.linspace(0, 1, 500)
+    for i in range(0, n+1):
+        plt.plot(lin, np.fromiter(map((lambda x: E(i, n)(x)), lin), dtype= np.float))
+    plt.show()
+showEs(10)
+
+############################################
+
 def BMatrixElem(i, j, n, fa, fb, fc, beta):
     v = E(j, n)
     u = E(i, n)
@@ -79,6 +94,42 @@ def FinalFunc(n, res, x):
         val += res[i] * E(i, n)(x)
     return val
 
+
+
+A = 0 
+B = 1
+LEN = B-A
+
+
+a = lambda x: 1
+b = lambda x: 0
+c = lambda x: 0
+f = lambda x: 0
+Beta = 0
+Gamma = 0
+N1 = 1
+N = int(10)
+
+PLOT_RANGE = [A-0.05*LEN, B+0.05*LEN, -1.5, 2]
+QUAD_LIMIT = 270
+QUAD_POINTS = np.linspace(A, B, N)
+
+
+
+print("Calculating excercise function")
+test = solveGalerkin(a, b, c, f, Beta, Gamma, N1, N)
+
+
+lp = np.linspace(A, B, 100)
+plt.plot(lp, np.fromiter(map((lambda x: FinalFunc(N, test, x)), lp), dtype=np.float_))
+plt.axis(PLOT_RANGE)
+plt.show()
+
+#######################################################################
+
+
+
+
 A = -3*np.pi
 B = 4*np.pi
 LEN = B-A
@@ -102,11 +153,6 @@ QUAD_POINTS = np.linspace(A, B, N)
 print("Calculating cos")
 cosinus = solveGalerkin(a, b, c, f, Beta, Gamma, N1, N)
 
-# N1 = np.sin(B)
-
-
-# print("Calculating sin")
-# sinus = solveGalerkin(a, b, c, f, Beta, Gamma, N1, N)
 
 a = lambda x: 1
 b = lambda x: 0
@@ -122,8 +168,8 @@ print("Calculating exp")
 exponent = solveGalerkin(a, b, c, f, Beta, Gamma, N1, N)
 
 lp = np.linspace(A, B, 100)
-# plt.plot(lp, np.fromiter(map((lambda x: FinalFunc(N, sinus, x)), lp), dtype=np.float_))
 plt.plot(lp, np.fromiter(map((lambda x: FinalFunc(N, cosinus, x)), lp), dtype=np.float_))
 plt.plot(lp, np.fromiter(map((lambda x: FinalFunc(N, exponent, x)), lp), dtype=np.float_))
 plt.axis(PLOT_RANGE)
 plt.show()
+
